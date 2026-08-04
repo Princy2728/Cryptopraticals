@@ -1,0 +1,19 @@
+key = "CIPHER"
+alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+cipher = key
+for ch in alpha:
+    if ch not in cipher:
+        cipher += ch
+
+text = input("Enter text: ").upper()
+result = ""
+
+for ch in text:
+    if ch.isalpha():
+        result += cipher[ord(ch) - 65]
+    else:
+        result += ch
+
+print("Cipher Alphabet:", cipher)
+print("Cipher Text:", result)
