@@ -1,0 +1,10 @@
+from math import factorial, log2
+
+total = factorial(25)
+unique = total // (factorial(5) ** 2)
+
+print("Total Possible Keys =", total)
+print("Approximation = 2^", round(log2(total), 2))
+
+print("Unique Keys =", unique)
+print("Approximation = 2^", round(log2(unique), 2))
