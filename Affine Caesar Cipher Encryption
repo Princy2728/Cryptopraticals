@@ -1,0 +1,18 @@
+from math import gcd
+
+a = int(input("Enter a: "))
+b = int(input("Enter b: "))
+text = input("Enter text: ").upper()
+
+if gcd(a, 26) != 1:
+    print("Invalid 'a' (Not Allowed)")
+else:
+    cipher = ""
+    for ch in text:
+        if ch.isalpha():
+            p = ord(ch) - 65
+            c = (a * p + b) % 26
+            cipher += chr(c + 65)
+        else:
+            cipher += ch
+    print("Cipher Text:", cipher)
