@@ -1,0 +1,4 @@
+# Correct shared key computation
+shared_key_A = pow(B_public, a_private, p)
+shared_key_B = pow(A_public, b_private, p)
+assert shared_key_A == shared_key_B
