@@ -1,0 +1,12 @@
+from Crypto.Cipher import DES3
+from Crypto.Random import get_random_bytes
+
+# Generate a 24-byte key for 3DES
+key = DES3.adjust_key_parity(get_random_bytes(24))
+cipher = DES3.new(key, DES3.MODE_ECB)
+
+# Encrypt large data
+with open("input.bin", "rb") as f:
+    data = f.read()
+
+ciphertext = cipher.encrypt(data[:len(data)//8*8])  # pad to block size
