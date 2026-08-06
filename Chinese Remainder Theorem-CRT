@@ -1,0 +1,8 @@
+def crt_decrypt(c, d, p, q):
+    dp = d % (p-1)
+    dq = d % (q-1)
+    q_inv = pow(q, -1, p)
+    m1 = pow(c, dp, p)
+    m2 = pow(c, dq, q)
+    h = (q_inv * (m1 - m2)) % p
+    return (m2 + h * q) % (p*q)
