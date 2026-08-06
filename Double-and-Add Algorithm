@@ -1,0 +1,9 @@
+  def ecc_scalar_mult(k, P, a, p):
+    R = None  # point at infinity
+    Q = P
+    while k > 0:
+        if k & 1:
+            R = ecc_add(R, Q, a, p)
+        Q = ecc_add(Q, Q, a, p)  # point doubling
+        k >>= 1
+    return R
