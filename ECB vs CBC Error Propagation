@@ -1,0 +1,14 @@
+def ecb_decrypt(blocks, key):
+    return [decrypt_block(b,key) for b in blocks]
+
+def cbc_decrypt(blocks, key, iv):
+    plain=[]
+    prev=iv
+    for b in blocks:
+        p = xor(decrypt_block(b,key), prev)
+        plain.append(p)
+        prev=b
+    return plain
+
+# Error in C1 → ECB: only P1 wrong
+# Error in C1 → CBC: P1 wrong, P2 wrong (propagates one block only)
