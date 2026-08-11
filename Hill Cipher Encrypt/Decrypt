@@ -1,0 +1,32 @@
+import numpy as np
+
+K = np.array([[9,4],[5,7]])
+
+def mod_inverse_matrix(K, mod=26):
+    det = int(round(np.linalg.det(K)))
+    det_inv = pow(det % mod, -1, mod)
+    adj = np.array([[K[1,1], -K[0,1]], [-K[1,0], K[0,0]]])
+    return (det_inv * adj) % mod
+
+def text_to_nums(t): return [ord(c)-65 for c in t.upper() if c.isalpha()]
+def nums_to_text(nums): return ''.join(chr(n+65) for n in nums)
+
+def hill_encrypt(text,K):
+    nums=text_to_nums(text); 
+    if len(nums)%2: nums.append(0)
+    out=[]
+    for i in range(0,len(nums),2):
+        out.extend(K.dot(nums[i:i+2])%26)
+    return nums_to_text(out)
+
+def hill_decrypt(cipher,K):
+    Kinv=mod_inverse_matrix(K)
+    nums=text_to_nums(cipher); out=[]
+    for i in range(0,len(nums),2):
+        out.extend(Kinv.dot(nums[i:i+2])%26)
+    return nums_to_text(out)
+
+pt="MEETMEATUSUALPLACEATTENRATHERTHANEIGHTOCLOCK"
+ct=hill_encrypt(pt,K)
+print("Ciphertext:",ct)
+print("Decrypted:",hill_decrypt(ct,K))
