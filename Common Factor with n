@@ -1,0 +1,15 @@
+import math
+from sympy import mod_inverse
+
+n, e = 3599, 31
+plaintext_block = 59   # shares factor with n
+
+g = math.gcd(plaintext_block, n)
+print("GCD =", g)
+
+if 1 < g < n:
+    p, q = g, n//g
+    phi = (p-1)*(q-1)
+    d = mod_inverse(e, phi)
+    print("Factors:", p, q)
+    print("Recovered private key d =", d)
