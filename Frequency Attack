@@ -1,0 +1,16 @@
+from collections import Counter
+
+english_order = "ETAOINSHRDLCUMWFGYPBVKJXQZ"
+
+def freq_attack(cipher, top_n=10):
+    counts = Counter([c for c in cipher.upper() if c.isalpha()])
+    mapping = {c: english_order[i] for i, c in enumerate([x for x,_ in counts.most_common()])}
+    guesses = []
+    for shift in range(top_n):
+        plain = ''.join(mapping.get(c,c) for c in cipher.upper())
+        guesses.append(plain)
+    return guesses
+
+cipher = "ZPV DBO TFF IPX UIJT XPSLT"
+for g in freq_attack(cipher, 3):
+    print(g)
