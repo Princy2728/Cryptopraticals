@@ -1,0 +1,22 @@
+def sdes_encrypt_block(block,key): ...
+def sdes_decrypt_block(block,key): ...
+
+def cbc_encrypt(blocks,key,iv):
+    out=[]
+    prev=iv
+    for b in blocks:
+        x = xor(b,prev)
+        c = sdes_encrypt_block(x,key)
+        out.append(c)
+        prev=c
+    return out
+
+def cbc_decrypt(blocks,key,iv):
+    out=[]
+    prev=iv
+    for c in blocks:
+        x = sdes_decrypt_block(c,key)
+        p = xor(x,prev)
+        out.append(p)
+        prev=c
+    return out
