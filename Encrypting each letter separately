@@ -1,0 +1,5 @@
+n, e = 3599, 31
+# Precompute ciphertexts for all possible letters 0–25
+cipher_map = {m: pow(m, e, n) for m in range(26)}
+
+print("Cipher dictionary:", cipher_map)
