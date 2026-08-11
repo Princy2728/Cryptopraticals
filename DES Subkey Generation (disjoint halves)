@@ -1,0 +1,8 @@
+def generate_subkeys(initial_key):
+    left, right = initial_key[:28], initial_key[28:]
+    subkeys = []
+    for shift in [1,1,2,2,2,2,2,2,1,2,2,2,2,2,2,1]:
+        left = left[shift:]+left[:shift]
+        right = right[shift:]+right[:shift]
+        subkeys.append(left[:24]+right[:24])  # 48-bit subkey
+    return subkeys
