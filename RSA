@@ -1,0 +1,26 @@
+import math
+
+# RSA public key
+n = 3599
+e = 31
+
+# Suppose someone tells us a plaintext block has a common factor with n
+plaintext_block = 59   # chosen example, shares factor with n
+
+# Step 1: Compute gcd
+g = math.gcd(plaintext_block, n)
+print("GCD =", g)
+
+# Step 2: If gcd > 1, we found a prime factor of n
+if g > 1 and g < n:
+    p = g
+    q = n // g
+    print("Factors of n:", p, q)
+
+    # Step 3: Compute phi(n)
+    phi = (p-1)*(q-1)
+
+    # Step 4: Compute private key d
+    from sympy import mod_inverse
+    d = mod_inverse(e, phi)
+    print("Recovered private key d =", d)
