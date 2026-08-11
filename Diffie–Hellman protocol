@@ -1,0 +1,28 @@
+def modexp(base, exp, mod):
+    res = 1
+    base %= mod
+    while exp > 0:
+        if exp % 2 == 1:
+            res = (res * base) % mod
+        base = (base * base) % mod
+        exp //= 2
+    return res
+
+# Public values
+a, q = 5, 23
+# Secrets
+xA, xB = 6, 15
+
+
+A = modexp(a, xA, q)
+B = modexp(a, xB, q)
+keyA = modexp(B, xA, q)
+keyB = modexp(A, xB, q)
+print("Correct DH keys:", keyA, keyB)
+
+
+A_wrong = modexp(xA, a, q)
+B_wrong = modexp(xB, a, q)
+keyA_wrong = modexp(B_wrong, xA, q)
+keyB_wrong = modexp(A_wrong, xB, q)
+print("Wrong scheme keys:", keyA_wrong, keyB_wrong)
