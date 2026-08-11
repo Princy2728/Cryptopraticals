@@ -1,0 +1,5 @@
+def pad(msg, block_size=8):
+    msg_bits = msg + "1"
+    while len(msg_bits)%block_size!=0:
+        msg_bits += "0"
+    return msg_bits
