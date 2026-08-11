@@ -1,0 +1,11 @@
+def ctr_encrypt(blocks,key,counter_start=0):
+    out=[]
+    ctr=counter_start
+    for b in blocks:
+        keystream = sdes_encrypt_block(format(ctr,'08b'),key)
+        out.append(xor(b,keystream))
+        ctr+=1
+    return out
+
+def ctr_decrypt(blocks,key,counter_start=0):
+    return ctr_encrypt(blocks,key,counter_start)  # same operation
