@@ -1,0 +1,6 @@
+import sympy
+n=3599; e=31
+p,q=59,61
+phi=(p-1)*(q-1)
+d = sympy.mod_inverse(e,phi)
+print("Private key d =",d)
