@@ -1,0 +1,3 @@
+# If d is leaked, attacker can compute phi(n) and derive any new e/d pair.
+# So changing e/d with same n is NOT safe.
+print("If private key leaks, Bob must generate new modulus n (new primes).")
