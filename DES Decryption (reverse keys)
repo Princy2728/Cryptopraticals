@@ -1,0 +1,5 @@
+def des_decrypt(block, keys):
+    # keys reversed for decryption
+    for k in reversed(keys):
+        block = des_round(block, k)
+    return block
