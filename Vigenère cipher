@@ -1,0 +1,22 @@
+import numpy as np
+
+# Known plaintext-ciphertext pairs (2x2 Hill cipher)
+P = np.array([[12, 4],   # "ME" -> M=12, E=4
+              [19, 0]])  # "TA" -> T=19, A=0
+
+C = np.array([[20, 14],  # "UO" -> U=20, O=14
+              [7, 19]])  # "HT" -> H=7, T=19
+
+# Modular inverse of matrix
+def mod_inverse_matrix(M, mod=26):
+    det = int(round(np.linalg.det(M))) % mod
+    det_inv = pow(det, -1, mod)  # modular inverse of determinant
+    adj = np.array([[M[1,1], -M[0,1]], [-M[1,0], M[0,0]]])
+    return (det_inv * adj) % mod
+
+# Recover key: K = C * P^-1 (mod 26)
+Pinv = mod_inverse_matrix(P)
+K = (C.dot(Pinv)) % 26
+
+print("Recovered Key Matrix:")
+print(K)
