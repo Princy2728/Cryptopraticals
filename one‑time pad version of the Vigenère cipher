@@ -1,0 +1,35 @@
+import random
+
+def otp_vigenere_encrypt(plaintext, key):
+    plaintext = plaintext.upper()
+    ciphertext = ""
+    for i, c in enumerate(plaintext):
+        if c.isalpha():
+            shift = key[i]
+            new_char = chr(((ord(c) - 65 + shift) % 26) + 65)
+            ciphertext += new_char
+        else:
+            ciphertext += c
+    return ciphertext
+
+def otp_vigenere_decrypt(ciphertext, key):
+    plaintext = ""
+    for i, c in enumerate(ciphertext):
+        if c.isalpha():
+            shift = key[i]
+            new_char = chr(((ord(c) - 65 - shift) % 26) + 65)
+            plaintext += new_char
+        else:
+            plaintext += c
+    return plaintext
+
+# Example usage
+plaintext = "HELLO WORLD"
+key = [random.randint(0,25) for _ in range(len(plaintext))]
+
+cipher = otp_vigenere_encrypt(plaintext, key)
+decrypted = otp_vigenere_decrypt(cipher, key)
+
+print("Key:", key)
+print("Ciphertext:", cipher)
+print("Decrypted:", decrypted)
