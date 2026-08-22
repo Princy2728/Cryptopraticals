@@ -1,0 +1,25 @@
+from Crypto.Cipher import DES
+import os
+
+# Pad plaintext to 8 bytes (64 bits)
+def pad(text):
+    while len(text) % 8 != 0:
+        text += ' '
+    return text
+
+# Example usage
+if __name__ == "__main__":
+    # Generate a random 8-byte key (DES uses 56 bits + 8 parity bits)
+    key = os.urandom(8)
+    des = DES.new(key, DES.MODE_ECB)
+
+    plaintext = "HELLODES"   # 8 bytes = one block
+    padded = pad(plaintext)
+
+    # Encrypt
+    ciphertext = des.encrypt(padded.encode())
+    print("Ciphertext:", ciphertext.hex())
+
+    # Decrypt
+    decrypted = des.decrypt(ciphertext).decode().strip()
+    print("Decrypted:", decrypted)
