@@ -1,0 +1,20 @@
+from Crypto.PublicKey import RSA, DSA
+from Crypto.Signature import pkcs1_15, DSS
+from Crypto.Hash import SHA256
+import random
+
+msg = b"Hello secure world"
+
+# --- RSA ---
+rsa_key = RSA.generate(2048)
+h = SHA256.new(msg)
+sig1 = pkcs1_15.new(rsa_key).sign(h)
+sig2 = pkcs1_15.new(rsa_key).sign(h)
+print("RSA signatures equal?", sig1 == sig2)  # always True
+
+# --- DSA ---
+dsa_key = DSA.generate(1024)
+h = SHA256.new(msg)
+sig1 = DSS.new(dsa_key, 'fips-186-3').sign(h)
+sig2 = DSS.new(dsa_key, 'fips-186-3').sign(h)
+print("DSA signatures equal?", sig1 == sig2)  # usually False
