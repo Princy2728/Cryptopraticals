@@ -1,0 +1,28 @@
+from Crypto.Cipher import AES
+import os
+
+def pad(msg):
+    while len(msg) % 16 != 0:
+        msg += b'\x00'
+    return msg
+
+def cbc_mac(key, message):
+    cipher = AES.new(key, AES.MODE_CBC, iv=b'\x00'*16)
+    ciphertext = cipher.encrypt(pad(message))
+    return ciphertext[-16:]  # last block is MAC
+
+# Example
+key = os.urandom(16)
+X = b"ONEBLOCKMSG1234"   # 16 bytes = one block
+
+# MAC of one-block message
+T = cbc_mac(key, X)
+print("MAC(K,X) =", T.hex())
+
+# Adversary constructs two-block message: X || (X ⊕ T)
+XxorT = bytes([x ^ t for x, t in zip(X, T)])
+two_block_msg = X + XxorT
+
+# Compute MAC of two-block message
+T2 = cbc_mac(key, two_block_msg)
+print("MAC(K, X || (X⊕T)) =", T2.hex())
