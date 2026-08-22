@@ -1,0 +1,24 @@
+STATE_SIZE = 1600      # SHA-3 state size in bits
+BLOCK_SIZE = 1024      # rate portion
+CAPACITY_SIZE = STATE_SIZE - BLOCK_SIZE  # 576 bits
+LANE_SIZE = 64         # each lane = 64 bits
+CAPACITY_LANES = CAPACITY_SIZE // LANE_SIZE  # 9 lanes
+
+def simulate():
+    capacity = [0] * CAPACITY_LANES  # all zero initially
+    rounds, filled = 0, 0
+
+    # Simplified: each round introduces nonzero bits into one new lane
+    while filled < CAPACITY_LANES:
+        for i in range(CAPACITY_LANES):
+            if capacity[i] == 0:
+                capacity[i] = 1
+                filled += 1
+                break
+        rounds += 1
+
+    return rounds
+
+if __name__ == "__main__":
+    result = simulate()
+    print(f"All {CAPACITY_LANES} capacity lanes became nonzero after {result} rounds.")
