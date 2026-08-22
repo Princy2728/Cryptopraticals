@@ -1,0 +1,37 @@
+from Crypto.Cipher import AES
+import os
+
+# Padding: add "1" bit then "0"s until block complete
+def pad(msg, block_size=16):
+    msg_bits = msg.encode() + b'\x80'  # 0x80 = "10000000"
+    while len(msg_bits) % block_size != 0:
+        msg_bits += b'\x00'
+    return msg_bits
+
+def unpad(msg):
+    return msg.rstrip(b'\x00').rstrip(b'\x80').decode(errors="ignore")
+
+# Example plaintext
+plaintext = "HELLO BLOCK CIPHER"
+key = os.urandom(16)   # AES key (128-bit)
+iv = os.urandom(16)    # Initialization vector
+
+padded = pad(plaintext)
+
+# ECB
+ecb_cipher = AES.new(key, AES.MODE_ECB)
+ecb_ct = ecb_cipher.encrypt(padded)
+ecb_pt = unpad(ecb_cipher.decrypt(ecb_ct))
+print("ECB:", ecb_ct.hex(), "→", ecb_pt)
+
+# CBC
+cbc_cipher = AES.new(key, AES.MODE_CBC, iv)
+cbc_ct = cbc_cipher.encrypt(padded)
+cbc_pt = unpad(AES.new(key, AES.MODE_CBC, iv).decrypt(cbc_ct))
+print("CBC:", cbc_ct.hex(), "→", cbc_pt)
+
+# CFB
+cfb_cipher = AES.new(key, AES.MODE_CFB, iv, segment_size=128)
+cfb_ct = cfb_cipher.encrypt(padded)
+cfb_pt = AES.new(key, AES.MODE_CFB, iv, segment_size=128).decrypt(cfb_ct).decode(errors="ignore")
+print("CFB:", cfb_ct.hex(), "→", cfb_pt)
