@@ -1,0 +1,22 @@
+from math import gcd
+
+def mod_inverse(a, m=26):
+    for x in range(1, m):
+        if (a * x) % m == 1:
+            return x
+    return None
+
+def encrypt(text, a, b):
+    return ''.join(chr(((a*(ord(ch)-65)+b)%26)+65) if ch.isalpha() else ch for ch in text.upper())
+
+def decrypt(cipher, a, b):
+    a_inv = mod_inverse(a)
+    if not a_inv: raise ValueError(f"'a'={a} not invertible mod 26")
+    return ''.join(chr(((a_inv*((ord(ch)-65)-b))%26)+65) if ch.isalpha() else ch for ch in cipher.upper())
+
+# Example
+a, b = 5, 8
+plain = "AFFINECIPHER"
+cipher = encrypt(plain, a, b)
+print("Ciphertext:", cipher)
+print("Decrypted :", decrypt(cipher, a, b))
