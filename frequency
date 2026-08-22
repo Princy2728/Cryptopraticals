@@ -1,0 +1,31 @@
+from collections import Counter
+
+# English letter frequency order (most to least common)
+english_order = "ETAOINSHRDLCUMWFGYPBVKJXQZ"
+
+def frequency_attack(ciphertext, top_n=10):
+    # Count letter frequencies in ciphertext
+    counts = Counter([c for c in ciphertext.upper() if c.isalpha()])
+    # Sort ciphertext letters by frequency
+    cipher_order = [x for x,_ in counts.most_common()]
+    
+    # Build mapping: ciphertext letter -> English frequency letter
+    mapping = {c: english_order[i] for i, c in enumerate(cipher_order)}
+    
+    # Generate guesses (simple substitution based on frequency)
+    guesses = []
+    for _ in range(top_n):
+        plain = ''.join(mapping.get(c, c) for c in ciphertext.upper())
+        guesses.append(plain)
+        # Rotate mapping slightly for alternative guesses
+        english_order_rot = english_order[_:] + english_order[:_]
+        mapping = {c: english_order_rot[i] for i, c in enumerate(cipher_order)}
+    
+    return guesses
+
+# Example usage
+ciphertext = "ZPV DBO TFF IPX UIJT XPSLT"  # "YOU CAN SEE HOW THIS WORKS"
+results = frequency_attack(ciphertext, top_n=10)
+
+for i, guess in enumerate(results, 1):
+    print(f"Guess {i}: {guess}")
