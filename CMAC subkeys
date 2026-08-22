@@ -1,0 +1,45 @@
+from Crypto.Cipher import AES
+
+def left_shift(block):
+    """Shift a bitstring left by 1 bit"""
+    shifted = int.from_bytes(block, 'big') << 1
+    return (shifted & ((1 << (len(block)*8)) - 1)).to_bytes(len(block), 'big')
+
+def generate_subkeys(key, block_size=128):
+    # Step 1: Encrypt all-zero block
+    cipher = AES.new(key, AES.MODE_ECB)
+    L = cipher.encrypt(b'\x00' * (block_size // 8))
+
+    # Step 2: Choose constant Rb depending on block size
+    if block_size == 128:
+        Rb = 0x87
+    elif block_size == 64:
+        Rb = 0x1B
+    else:
+        raise ValueError("Unsupported block size")
+
+    # Step 3: Derive K1
+    if (L[0] & 0x80):  # if MSB=1
+        K1 = left_shift(L)
+        K1 = bytearray(K1)
+        K1[-1] ^= Rb
+        K1 = bytes(K1)
+    else:
+        K1 = left_shift(L)
+
+    # Step 4: Derive K2 from K1
+    if (K1[0] & 0x80):
+        K2 = left_shift(K1)
+        K2 = bytearray(K2)
+        K2[-1] ^= Rb
+        K2 = bytes(K2)
+    else:
+        K2 = left_shift(K1)
+
+    return K1, K2
+
+# Example usage
+key = b"Sixteen byte key"
+K1, K2 = generate_subkeys(key, 128)
+print("K1:", K1.hex())
+print("K2:", K2.hex())
